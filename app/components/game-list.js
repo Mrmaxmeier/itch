@@ -29,6 +29,7 @@ class GameCell extends Component {
     let cover_url = mori.get(game, 'cover_url')
     let user = mori.get(game, 'user')
     let has_cover = !!cover_url
+    let is_html = mori.get(game, 'type') === 'html'
 
     let style = {
       backgroundImage: cover_url && `url('${cover_url}')`
@@ -124,6 +125,23 @@ class GameCell extends Component {
             ])
           )
         ]),
+        is_html
+        ? r.div({
+          className: button_classes, style: button_style,
+          onClick: () => {
+            console.log(mori.toJs(game))
+            window.gm = mori.toJs(game)
+            //let remote = require('electron').remote
+            //let shell = remote.require('electron').shell
+            //shell.openExternal(mori.get(game, 'url'))
+          }
+        }, [
+          r.span({}, [
+            r(Icon, {icon: 'play'}),
+            ' Stream'
+          ])
+        ])
+        : '',
         ((cave && ['idle', 'error'].indexOf(task) !== -1)
         ? r.div({classSet: {cave_actions: true, error: (task === 'error')}}, (
           (task === 'error')
