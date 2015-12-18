@@ -11,6 +11,7 @@ let pairs = require('underscore').pairs
 
 let defer = require('../util/defer')
 let env = require('../env')
+let db = require('remote').require('./util/db') // FIXME context fuckery
 
 let state = mori.hashMap(
   'page', 'login',
@@ -101,6 +102,9 @@ function focus_panel (payload) {
     AppActions.focus_window()
     AppActions.fetch_games(panel)
   })
+
+  if (payload.save)
+    db.save_setting('panel', panel)
 }
 
 function switch_page (page) {
@@ -135,6 +139,12 @@ function ready_to_roll (payload) {
   } else {
     focus_panel({panel: 'owned'})
   }
+
+  db.get_setting('panel').then(panel => {
+    panel = panel || 'owned'
+    // FIXME filter invalid panels
+    focus_panel({ panel })
+  })
 
   defer(() => {
     AppActions.fetch_games('dashboard')

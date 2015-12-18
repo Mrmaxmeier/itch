@@ -371,4 +371,3 @@ AppDispatcher.register('cave-store', Store.action_listeners(on => {
 }))
 
 module.exports = CaveStore
-

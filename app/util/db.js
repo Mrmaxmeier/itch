@@ -208,6 +208,27 @@ let self = {
       // because we have paginated fetch logic elsewhere
       relations: {}
     })
+  },
+
+  save_setting: async function(key, value) {
+    let d = await self.find_one({settings: {$exists: true}})
+    if (!!d) {
+      delete d.settings[key]
+      if (value)
+        d.settings[key] = value
+      await self.update({settings: {$exists: true}}, {settings: d.settings})
+    } else {
+      let settings = {}
+      settings[key] = value
+      await self.insert({settings: settings})
+    }
+    return true
+  },
+
+  get_setting: async function(key) {
+    let d = await self.find_one({settings: {$exists: true}})
+    if (!!d)
+      return d.settings[key]
   }
 }
 
