@@ -102,9 +102,6 @@ function focus_panel (payload) {
     AppActions.focus_window()
     AppActions.fetch_games(panel)
   })
-
-  if (payload.save)
-    db.save_setting('panel', panel)
 }
 
 function switch_page (page) {
@@ -142,8 +139,12 @@ function ready_to_roll (payload) {
 
   db.get_setting('panel').then(panel => {
     panel = panel || 'owned'
-    // FIXME filter invalid panels
-    focus_panel({ panel })
+    let collections = mori.get(mori.get(AppStore.get_state(), 'library'), 'collections')
+    let panel_exists = !panel.startsWith('collections/') || mori.reduceKV((b, key, _) => {
+      return b || (panel === `collections/${key}`)
+    }, false, collections)
+    if (panel_exists)
+      focus_panel({ panel })
   })
 
   defer(() => {
@@ -201,6 +202,9 @@ AppDispatcher.register('app-store', Store.action_listeners(on => {
   on(AppConstants.SETUP_WAIT, setup_wait)
 
   on(AppConstants.LIBRARY_FOCUS_PANEL, focus_panel)
+  on(AppConstants.LIBRARY_SAVE_PANEL_STATE, (payload) => {
+    db.save_setting('panel', payload.panel)
+  })
 
   on(AppConstants.NO_STORED_CREDENTIALS, no_stored_credentials)
   on(AppConstants.LOGIN_ATTEMPT, login_attempt)

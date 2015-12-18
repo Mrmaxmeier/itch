@@ -364,7 +364,10 @@ class LibraryPanelLink extends Component {
     let _label = `${label}${_progress}`
 
     return (
-      r.div({classSet: {panel_link: true, current, [className]: true}, onClick: () => AppActions.focus_panel(this.props.name, true)}, [
+      r.div({classSet: {panel_link: true, current, [className]: true}, onClick: () => {
+          AppActions.focus_panel(this.props.name)
+          AppActions.save_panel_state(this.props.name)
+        }}, [
         before,
         _label,
         (count > 0

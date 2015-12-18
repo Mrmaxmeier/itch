@@ -13,6 +13,7 @@ module.exports = keyMirror({
   FOCUS_WINDOW: null,
   HIDE_WINDOW: null,
   LIBRARY_FOCUS_PANEL: null,
+  LIBRARY_SAVE_PANEL_STATE: null,
 
   /* Self updates */
   CHECK_FOR_SELF_UPDATE: null,

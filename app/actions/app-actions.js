@@ -39,11 +39,17 @@ let self = {
     AppDispatcher.dispatch({ action_type: AppConstants.HIDE_WINDOW })
   },
 
-  focus_panel: (panel, save) => {
+  focus_panel: (panel) => {
     AppDispatcher.dispatch({
       action_type: AppConstants.LIBRARY_FOCUS_PANEL,
-      panel,
-      save
+      panel
+    })
+  },
+
+  save_panel_state: (panel) => {
+    AppDispatcher.dispatch({
+      action_type: AppConstants.LIBRARY_SAVE_PANEL_STATE,
+      panel
     })
   },
 
