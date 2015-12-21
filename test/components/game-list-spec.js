@@ -16,7 +16,7 @@ test('game-list', t => {
 
   t.case('GameList', t => {
     sd.shallowRender($(GameList, {}))
-    let games = mori.toClj(_.indexBy([{id: 12}, {id: 26}, {id: 42}], 'id'))
+    let games = mori.toClj([{id: 12}, {id: 26}, {id: 42}])
     let installs = mori.toClj({
       'asd09f8': {game_id: 42}
     })
