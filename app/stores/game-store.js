@@ -167,8 +167,6 @@ async function fetch_search_page (query, page, game_ids, games) {
   let user = CredentialsStore.get_current_user()
 
   let res = await user.search(query, page)
-  console.log(`query ${query}, got res`)
-  console.log(res)
   let total_items = res.total_items || res.per_page // FIXME: remove || res.per_page
   let fetched = res.per_page * page
   game_ids = game_ids.concat(_.pluck(res.games, 'id'))

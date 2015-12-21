@@ -1,4 +1,3 @@
-
 $user_panel_height: 40px;
 $cell_ratio: 152 / 192;
 $cell_width: 185px;
@@ -226,6 +225,17 @@ $placeholder_link_color: #93C1F3;
         background: #797979;
         color: #F5F5F5;
       }
+    }
+
+    .dimmer {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(185, 185, 185, 0);
+      z-index: 1;
+    }
+    .dimmer.active {
+      background: rgba(185, 185, 185, 0.3);
     }
   }
 

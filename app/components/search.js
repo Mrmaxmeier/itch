@@ -28,8 +28,6 @@ class SearchContent extends Component {
     let owned_games_by_id = mori.reduce(index_by, mori.hashMap(), all_games)
 
     let query = mori.getIn(state, ['search', 'query'])
-    window.search = mori.toJs(mori.get(state, 'search'))
-    window.state = mori.toJs(state)
     let search_games = mori.getIn(state, ['search', 'games'])
     let loading = query !== mori.getIn(state, ['search', 'fetched_query'])
 
@@ -37,7 +35,10 @@ class SearchContent extends Component {
       r.div({className: 'searchbox'}, [
         r.input({type: 'text', value: query, onChange: this.onInput.bind(this)})
       ]),
-      r(GameList, {games: search_games, caves, owned_games_by_id})
+      r.div({}, [
+        r.div({classSet: {dimmer: true, active: loading}, style: {transition: 'all 0.2s'}}),
+        r(GameList, {games: search_games, caves, owned_games_by_id})
+      ])
     ])
   }
 }
