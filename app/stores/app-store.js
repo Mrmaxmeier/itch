@@ -208,11 +208,7 @@ function cave_thrown_into_bit_bucket (payload) {
 }
 
 function search_fetched (payload) {
-  var games = mori.hashMap()
-  payload.game_ids.forEach((game_id) => {
-    let game = payload.games[game_id]
-    games = mori.assoc(games, game.id, mori.toClj(game))
-  })
+  let games = mori.map((game_id) => mori.toClj(payload.games[game_id]), payload.game_ids)
   state = mori.assocIn(state, ['library', 'search', 'games'], games)
   state = mori.assocIn(state, ['library', 'search', 'fetched_query'], payload.query)
   AppStore.emit_change()

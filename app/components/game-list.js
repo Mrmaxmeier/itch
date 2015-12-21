@@ -268,7 +268,7 @@ class GameList extends React.Component {
         let owned = mori.get(owned_games_by_id, game_id.toString())
         if (!pred(cave)) return ''
         return r(GameCell, {key: game_id, game, cave, owned})
-      }, mori.vals(games))))
+      }, games)))
     )
   }
 }

@@ -140,9 +140,13 @@ class User {
     return this.request('get', `/collection/${collection_id}/games`, {page})
   }
 
-  search (query, page) {
-    page = page || 1
-    return this.request('get', '/search/games', {query})
+  async search (query, page) {
+    if (typeof page === 'undefined') {
+      page = 1
+    }
+    let res = await this.request('get', '/search/games', {query})
+    res.games = ensure_array(res.games)
+    return res
   }
 
   download_key_uploads (download_key_id) {
