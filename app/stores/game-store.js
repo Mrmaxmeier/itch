@@ -2,6 +2,7 @@
 
 let Promise = require('bluebird')
 let _ = require('underscore')
+let mori = require('mori')
 
 let Store = require('./store')
 let CredentialsStore = require('./credentials-store')
@@ -148,7 +149,7 @@ async function fetch_keys (type, page) {
   cache_owned_games()
 }
 
-async function fetch_search_page (query, page, game_ids) {
+async function fetch_search_page (query, page, game_ids, games) {
   if (typeof page === 'undefined') {
     page = 1
   }
@@ -157,20 +158,30 @@ async function fetch_search_page (query, page, game_ids) {
     game_ids = []
   }
 
+  if (typeof games === 'undefined') {
+    games = {}
+  }
+
   log(opts, `fetching page ${page} of search '${query}'`)
 
   let user = CredentialsStore.get_current_user()
 
   let res = await user.search(query, page)
+  console.log(`query ${query}, got res`)
+  console.log(res)
   let total_items = res.total_items || res.per_page // FIXME: remove || res.per_page
   let fetched = res.per_page * page
-  game_ids = game_ids.concat(pluck(res.games, 'id'))
+  game_ids = game_ids.concat(_.pluck(res.games, 'id'))
+  for (let key of Object.keys(res.games)) {
+    let game = res.games[key]
+    games[game.id] = game
+  }
 
   await db.save_games(res.games)
-  AppActions.search_fetched(query, game_ids)
+  AppActions.search_fetched(query, game_ids, games)
 
   if (fetched < total_items) {
-    await fetch_search_page(query, page + 1, game_ids)
+    await fetch_search_page(query, page + 1, games)
   }
 }
 

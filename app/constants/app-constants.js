@@ -43,6 +43,8 @@ module.exports = keyMirror({
   CAVE_PROBE: null,
   /** Let the others figure it out */
   CAVE_REPORT: null,
+  /** User changed search query */
+  SEARCH_QUERY_CHANGE: null,
 
   /** Open a game's page */
   GAME_BROWSE: null,

@@ -25,7 +25,11 @@ let state = mori.hashMap(
     'games', mori.hashMap(),
     'panel', '',
     'collections', mori.hashMap(),
-    'caves', mori.hashMap()
+    'caves', mori.hashMap(),
+    'search', mori.hashMap(
+      'query', 'x-moon',
+      'games', mori.hashMap()
+    )
   ),
 
   'login', mori.hashMap(
@@ -203,6 +207,17 @@ function cave_thrown_into_bit_bucket (payload) {
   }
 }
 
+function search_fetched (payload) {
+  var games = mori.hashMap()
+  payload.game_ids.forEach((game_id) => {
+    let game = payload.games[game_id]
+    games = mori.assoc(games, game.id, mori.toClj(game))
+  })
+  state = mori.assocIn(state, ['library', 'search', 'games'], games)
+  state = mori.assocIn(state, ['library', 'search', 'fetched_query'], payload.query)
+  AppStore.emit_change()
+}
+
 AppDispatcher.register('app-store', Store.action_listeners(on => {
   on(AppConstants.SETUP_STATUS, setup_status)
   on(AppConstants.SETUP_WAIT, setup_wait)
@@ -226,6 +241,12 @@ AppDispatcher.register('app-store', Store.action_listeners(on => {
   on(AppConstants.GAME_PURCHASED, game_purchased)
   on(AppConstants.DISMISS_STATUS, dismiss_status)
   on(AppConstants.CAVE_THROWN_INTO_BIT_BUCKET, cave_thrown_into_bit_bucket)
+
+  on(AppConstants.SEARCH_FETCHED, search_fetched),
+  on(AppConstants.SEARCH_QUERY_CHANGE, (payload) => {
+    state = mori.assocIn(state, ['library', 'search', 'query'], payload.query)
+    AppStore.emit_change()
+  })
 
   on(AppConstants.GAIN_FOCUS, (payload) => {
     AppActions.fetch_collections()
