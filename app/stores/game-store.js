@@ -148,6 +148,44 @@ async function fetch_keys (type, page) {
   cache_owned_games()
 }
 
+async function fetch_search_page (query, page, game_ids) {
+  if (typeof page === 'undefined') {
+    page = 1
+  }
+
+  if (typeof game_ids === 'undefined') {
+    game_ids = []
+  }
+
+  log(opts, `fetching page ${page} of search '${query}'`)
+
+  let user = CredentialsStore.get_current_user()
+
+  let res = await user.search(query, page)
+  let total_items = res.total_items || res.per_page // FIXME: remove || res.per_page
+  let fetched = res.per_page * page
+  game_ids = game_ids.concat(pluck(res.games, 'id'))
+
+  await db.save_games(res.games)
+  AppActions.search_fetched(query, game_ids)
+
+  if (fetched < total_items) {
+    await fetch_search_page(query, page + 1, game_ids)
+  }
+}
+
+async function fetch_search (payload) {
+  let query = payload.query
+  let user = CredentialsStore.get_current_user()
+
+  log(opts, `fetch_search(${query})`)
+  try {
+    await fetch_search_page(query)
+  } catch (e) {
+    console.log(`while fetching search games: ${e.stack || e}`)
+  }
+}
+
 /* Cache API results in DB */
 
 async function cache_owned_games () {
@@ -206,7 +244,8 @@ AppDispatcher.register('game-store', Store.action_listeners(on => {
     GameStore.emit_change()
   })
 
-  on(AppConstants.FETCH_GAMES, fetch_games)
+  on(AppConstants.FETCH_GAMES, fetch_games),
+  on(AppConstants.FETCH_SEARCH, fetch_search)
   on(AppConstants.CAVE_PROGRESS, (payload) => {
     let id = payload.opts.id
 

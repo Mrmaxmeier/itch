@@ -140,6 +140,11 @@ class User {
     return this.request('get', `/collection/${collection_id}/games`, {page})
   }
 
+  search (query, page) {
+    page = page || 1
+    return this.request('get', '/search/games', {query})
+  }
+
   download_key_uploads (download_key_id) {
     return this.request('get', `/download-key/${download_key_id}/uploads`)
   }

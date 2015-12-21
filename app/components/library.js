@@ -12,6 +12,7 @@ let Icon = misc.Icon
 let TaskIcon = misc.TaskIcon
 let ErrorList = misc.ErrorList
 let ProgressBar = misc.ProgressBar
+let SearchContent = require('./search').SearchContent
 
 let AppActions = require('../actions/app-actions')
 
@@ -26,10 +27,12 @@ class LibraryPage extends Component {
     let state = this.props.state
     let update = this.props.update
 
+    let content = mori.get(state, 'panel') === 'search' ? SearchContent : LibraryContent
+
     return r.div({className: 'library_page'}, [
       r(StatusBar, {update}),
       r(LibrarySidebar, {state}),
-      r(LibraryContent, {state})
+      r(content, {state})
     ])
   }
 }
@@ -209,6 +212,8 @@ class LibrarySidebar extends Component {
           : ''),
           r(LibraryPanelLink, {before: r(Icon, {icon: 'heart-filled'}), name: 'owned', label: 'Owned', panel, games, className: 'owned'}),
           r(LibraryPanelLink, {before: r(Icon, {icon: 'checkmark'}), name: 'caved', label: 'Installed', panel, games, count: installed_count, className: 'installed'}),
+          r.div({className: 'separator'}),
+          r(LibraryPanelLink, {before: r(Icon, {icon: 'search'}), name: 'search', label: 'Search...', panel, games, count: 0, className: 'installed'}),
           r.div({className: 'separator'})
         ].concat(broken_count > 0
           ? [

@@ -215,6 +215,18 @@ $placeholder_link_color: #93C1F3;
     left: $sidebar_width;
     right: 0;
     overflow: auto;
+
+    .searchbox {
+      overflow-x: hidden;
+
+      input {
+        height: 1.4em;
+        font-size: 20px;
+        width: 100%;
+        background: #797979;
+        color: #F5F5F5;
+      }
+    }
   }
 
   .placeholder {
