@@ -208,6 +208,11 @@ function cave_thrown_into_bit_bucket (payload) {
 }
 
 function search_fetched (payload) {
+  let current_query = mori.getIn(state, ['library', 'search', 'query'])
+  let fetched_query = mori.getIn(state, ['library', 'search', 'fetched_query'])
+  if (current_query === fetched_query && payload.query !== current_query) {
+    return // got outdated search result, network lag?
+  }
   let games = mori.map((game_id) => mori.toClj(payload.games[game_id]), payload.game_ids)
   state = mori.assocIn(state, ['library', 'search', 'games'], games)
   state = mori.assocIn(state, ['library', 'search', 'fetched_query'], payload.query)

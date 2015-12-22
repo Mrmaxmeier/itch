@@ -184,8 +184,12 @@ async function fetch_search_page (query, page, game_ids, games) {
 
 async function fetch_search (payload) {
   let query = payload.query
+  if (query === '') {
+    log(opts, 'empty fetch_search query')
+    AppActions.search_fetched(query, [], {})
+    return
+  }
   let user = CredentialsStore.get_current_user()
-
   log(opts, `fetch_search(${query})`)
   try {
     await fetch_search_page(query)

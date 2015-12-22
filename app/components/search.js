@@ -30,13 +30,14 @@ class SearchContent extends Component {
     let query = mori.getIn(state, ['search', 'query'])
     let search_games = mori.getIn(state, ['search', 'games'])
     let loading = query !== mori.getIn(state, ['search', 'fetched_query'])
+    let empty = query === ''
 
     return r.div({className: 'main_content'}, [
       r.div({className: 'searchbox'}, [
-        r.input({type: 'text', value: query, onChange: this.onInput.bind(this)})
+        r.input({type: 'text', value: query, placeholder: 'Search...', onChange: this.onInput.bind(this)})
       ]),
       r.div({}, [
-        r.div({classSet: {dimmer: true, active: loading}, style: {transition: 'all 0.2s'}}),
+        r.div({classSet: {dimmer: true, active: loading && !empty}, style: {transition: 'all 0.2s'}}),
         r(GameList, {games: search_games, caves, owned_games_by_id})
       ])
     ])
