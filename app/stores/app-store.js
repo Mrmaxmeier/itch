@@ -27,7 +27,7 @@ let state = mori.hashMap(
     'collections', mori.hashMap(),
     'caves', mori.hashMap(),
     'search', mori.hashMap(
-      'query', 'x-moon',
+      'query', '',
       'games', mori.hashMap()
     )
   ),
