@@ -213,7 +213,7 @@ class LibrarySidebar extends Component {
           r(LibraryPanelLink, {before: r(Icon, {icon: 'heart-filled'}), name: 'owned', label: 'Owned', panel, games, className: 'owned'}),
           r(LibraryPanelLink, {before: r(Icon, {icon: 'checkmark'}), name: 'caved', label: 'Installed', panel, games, count: installed_count, className: 'installed'}),
           r.div({className: 'separator'}),
-          r(LibraryPanelLink, {before: r(Icon, {icon: 'search'}), name: 'search', label: 'Search...', panel, games, count: mori.count(mori.getIn(state, ['search', 'games'])), className: 'installed'}),
+          r(LibraryPanelLink, {before: r(Icon, {icon: 'search'}), name: 'search', label: 'Search...', panel, games, count: panel === 'search' ? mori.count(mori.getIn(state, ['search', 'games'])) : 0, className: 'search'}),
           r.div({className: 'separator'})
         ].concat(broken_count > 0
           ? [

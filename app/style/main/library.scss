@@ -159,6 +159,10 @@ $placeholder_link_color: #93C1F3;
           border-color: #577FDA;
         }
 
+        &.search {
+          border-color: #DA57AC;
+        }
+
         &:hover {
           background: rgba(black, .1);
         }
@@ -233,9 +237,10 @@ $placeholder_link_color: #93C1F3;
       height: 100%;
       background: rgba(185, 185, 185, 0);
       z-index: 1;
+      pointer-events: none;
     }
     .dimmer.active {
-      background: rgba(185, 185, 185, 0.3);
+      background: rgba(160, 160, 160, 0.3);
     }
   }
 
