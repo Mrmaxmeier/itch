@@ -1,0 +1,39 @@
+{
+	"osx+linux": {
+		"install_profiles": {
+			"default": [
+				{"type": "download", "file": "foo.bar", "platform": "linux"},
+				{"type": "extract"},
+				{"type": "bash", "command": "unzip file.zip", "platform": "linux"},
+				{"type": "bash", "command": "steghide game.png", "platform": "osx"}
+			]
+		},
+		"launch_profiles": {
+			"python3-version": [
+				{"type": "bash", "command": "export X_ITCH_LAUNCHED=1"},
+				{"type": "bash", "command": "python3 game.py"}
+			],
+			"love-version": [
+				{"type": "bash", "command": "/Applications/love.app/Contents/MacOS/love game.love", "platform": "osx"},
+				{"type": "bash", "command": "love game.love"}
+			],
+			"auto-executable": [
+				{"type": "execute", "file": "game.sh"}
+			]
+		},
+		"requirements": [
+			{"name": "python", "version": "3"},
+			{"name": "love", "version": "0.9.2"},
+			{"name": "osx-only-dep", "platform": "osx"}
+		]
+	},
+	"windows": {
+		"launch_profiles": {
+			"default": [
+				{"type": "batch", "command": "its a trap"},
+				{"type": "execute", "file": "game.exe"}
+			]
+		}
+	},
+	"manifest_version": 1
+}
