@@ -73,6 +73,15 @@ let CaveStore = Object.assign(new Store('cave-store'), {
     return path.join(loc_dir, 'archives', `${upload.id}${path.extname(upload.filename)}`)
   },
 
+  manifest_path: function (loc, cave_id) {
+    if (typeof cave_id === 'undefined') {
+      throw new Error('Missing args for CaveStore.manifest_path')
+    }
+
+    let loc_dir = CaveStore.install_location_dir(loc)
+    return path.join(loc_dir, 'manifest', `${cave_id}.json`)
+  },
+
   app_path: function (loc, cave_id) {
     if (typeof cave_id === 'undefined') {
       throw new Error('Missing args for CaveStore.app_path')
